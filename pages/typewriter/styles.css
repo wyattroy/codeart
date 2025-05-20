@@ -1,0 +1,44 @@
+body {
+    background-color: #eeeeee;
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    text-align: left;
+    font-family: 'Courier', sans-serif;
+
+}
+
+#typingarea {
+    font-size: 5rem;
+    text-align: center;
+    background-color: #333;
+    color: white;
+}
+
+.typedpage {
+    /* border: 1px; */
+    border-width: 1px;
+    background-color: white;
+    font-size: 2rem;
+    padding: 30px;
+}
+
+h1 {
+    padding: 30px;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+header a {
+    color: #888;
+}
+
+#navbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

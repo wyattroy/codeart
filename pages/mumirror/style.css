@@ -1,0 +1,14 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #000000;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+}
+canvas {
+  display: block;
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

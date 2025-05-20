@@ -1,0 +1,41 @@
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: left;
+    margin: 50px;
+    line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+}
+h1 {
+    color: #333;
+}
+.projects {
+    list-style: none;
+    padding: 0;
+}
+.projects li {
+    margin: 10px 0;
+}
+.projects a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 18px;
+}
+.projects a:hover {
+    text-decoration: underline;
+}
+
+button {
+    background-color: #486c94;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #365574; 
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storymaker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="module" src="main.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 class="text-center my-4">Storymaker</h1>
+    <p class="container">
+        It's hard to ad-lib a proper bedtime story, complete with a hero's journey character arc. I made this simple tool to help you come up with one on the spot. All the narrative drama is still up to you -- but these are the bones. It'll even give you some help with names and relationships to get your ideas flowing.
+    </p>
+    <p class="container">
+        You can either type your story below, or just click the blue button to progress through the hero's journey parts and say your story aloud.
+    </p>   
+    <p class="container">
+        This site will give you random prompts along the way to help you come up with character names, relationships, and objects that inspire the plot. Remember, though: YOU are the storymaker. This little site just helps nudge you in the right direction.
+    </p> 
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-body">
+                <h2 id="promptTitle" class="card-title"></h2>
+                <p id="promptDescription" class="card-text"></p>
+                <textarea id="textbox" class="form-control mb-3" placeholder="Click Start to begin..." rows="4" cols="30"></textarea>
+                <button id="addText" class="btn btn-primary" onclick="addText()">Start</button>
+            </div>
+        </div>
+        <div class="card my-4">
+            <div class="card-body">
+                <h2>Your Story</h2>
+                <textarea id="textarea" class="form-control" rows="10" cols="30" readonly></textarea>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

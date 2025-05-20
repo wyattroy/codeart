@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <title>Splatcubes</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+  <!-- Prism.js CSS -->
+<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+
+<!-- Prism.js library -->
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+<!-- C# language support -->
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-csharp.min.js"></script>
+
+</head>
+
+<body>
+ 
+<p>
+    <h1>Splatcubes</h1>
+</p>
+<p>
+    Hold 3D photos in your hand. 
+</p>
+<p>
+    <img src="images/aaronmia.gif" style="width: 50%";>
+</p>
+
+<p>
+    <h2>Abstract</h2>
+</p>
+<p>
+    Gaussian splats model real‑world scenes as thousands of semi‑transparent “blobs” in 3D space, capturing soft boundaries, translucency, and motion more naturally than polygonal meshes. Yet, these volumetric datasets remain confined to 2D screens and mouse‑driven interactions. In this project, we aim to bring splats back into the tangible analogue world.
+Methodologically, we:
+<ol>
+    <li>
+        Capture splats with Polycam and convert binary PLY files to ASCII via a Python script;
+    </li>
+    <li>
+        Parse each Gaussian’s XYZ, exponential scale, quaternion rotation, and opacity in Rhino/Grasshopper, then proxy it as a 14‑face low‑poly sphere;
+    </li>
+    <li>
+        Filter blobs outside a parametric deviation from the average volume and thicken meshes by opacity for printability;
+    </li>
+    <li>
+        Auto‑center the mesh cloud at (0,0,0) and generate a bounding cube;
+    </li>
+    <li>
+        Fabricate “splatcubes” on an Objet260 Connex3 resin printer using various black and white semi‑transparent resins with differing light‑transmission properties.
+    </li>
+</ol>
+</p>
+<h2>1. Introduction</h2>
+<p>
+  Digital photography has long compressed the richness of the physical world into two dimensions. With the advent of volumetric capture techniques such as Neural Radiance Fields and Gaussian Splatting, we now possess representations that encode scenes as probabilistic, spatially distributed semi-opaque volumes. These formats provide more accurate approximations of physical reality, emphasizing the blurriness and continuity of real-world boundaries over the hard edges of mesh topology.
+</p>
+<p>
+  However, splats remain inherently digital, bound to the screen and navigable only through mouse-driven interaction. In this work, we develop a novel technique for physically manifesting splats via 3D printing. Our system translates the digital representation of a Gaussian field into an artifact that can be held, viewed from any angle, and appreciated as a form of tangible volumetric memory.
+</p>
+
+<h2>2. Background and Motivation</h2>
+<p>
+  While volumetric rendering has advanced significantly in realism and efficiency, few efforts have bridged the gap between volumetric capture and physical fabrication. Most existing fabrication pipelines rely on mesh representations or voxel grids. Our work proposes a direct transformation of probabilistic geometry—Gaussian splats—into physical form. Inspired by cubist attempts to depict multiview reality and prior research on motion-capture CNC forms, this project investigates how volumetric "photographs" might be preserved through material instantiation.
+</p>
+
+<h2>3. Data Representation and Preprocessing</h2>
+
+<h3>3.1 Splat Capture and Export</h3>
+<p>
+  We utilize mobile-based photogrammetry platforms (e.g., Polycam, Luma, Scaniverse) to generate Gaussian splat datasets, exported in <code>.ply</code> format. Each splat is defined by its 3D position, anisotropic exponential scale, rotation (as quaternion), color (RGB), and opacity.
+</p>
+
+<h3>3.2 Binary to ASCII Conversion</h3>
+<p>
+  Polycam’s output is binary-encoded for efficiency. We developed a Python script to convert binary <code>.ply</code> files into human-readable ASCII format, enabling direct parsing within Rhino/Grasshopper.
+</p>
+
+<h3>3.3 Format Interpretation</h3>
+<p>
+  Each row in the ASCII file corresponds to a splat. We analyze the data header to map column positions to their semantic values. Key challenges included decoding exponential scale factors, interpreting quaternion-based rotations, and filtering visually irrelevant fields.
+</p>
+
+<h2>4. Mesh Proxy Construction</h2>
+
+<h3>4.1 Proxy Geometry Design</h3>
+<p>
+  Each splat is approximated as a low-poly 14-face icosphere. This balances computational performance with visual fidelity. While true Gaussian density fields have ellipsoidal falloff, we opt for geometric proxies to enable mesh Boolean operations and physical fabrication.
+</p>
+
+<h3>4.2 Transformation Application</h3>
+<p>
+  Each blob is instantiated at its 3D position and transformed according to its scale and rotation. Quaternion-to-Euler conversion and transformation matrices are computed within Grasshopper/C# components.
+</p>
+
+<h3>4.3 Centering and Rescaling</h3>
+<p>
+  To normalize splat location across diverse capture environments, we compute the centroid of all splats and offset the cloud to the origin. Global scale factors are introduced to fit printable volumes.
+</p>
+
+<h2>5. Mesh Optimization and Filtering</h2>
+
+<h3>5.1 Scale-Based Filtering</h3>
+<p>
+  We compute statistical summaries of splat sizes and apply percentile-based filtering to remove outliers—typically large, low-detail background splats or undersized noise artifacts.
+</p>
+
+<h3>5.2 Opacity-Based Thickening</h3>
+<p>
+  We interpret splat opacity as a physical measure of material density. Thin splats are thickened proportionally to their opacity value to ensure printability while preserving relative transparency cues.
+</p>
+
+<h3>5.3 Shape Optimization</h3>
+<p>
+  Highly anisotropic splats are unsuitable for fabrication due to sub-millimeter thinness. We enforce minimum thicknesses across all axes.
+</p>
+<p>
+    <img src="images/dadhead.png" style="width: 80%";>
+</p>
+<h2>6. Fabrication Pipeline</h2>
+
+<h3>6.1 Boolean Composition</h3>
+<p>
+  After instantiating splat proxies, we shrinkwrap the mesh collection to remove overlaps, decimate the result, and subtract it from a bounding cube to define clear (air) and opaque (material) regions.
+</p>
+
+<h3>6.2 Material Encoding</h3>
+<p>
+  We map opacity to material density by selecting black/white resin pairs, or embedding opaque shapes within clear resin containers (splatcubes). Multi-material resin printing is supported via dual-mesh STL output.
+</p>
+
+<h3>6.3 Printing and Post-processing</h3>
+<p>
+  Artifacts are printed on a DLP printer at 50 µm resolution. Post-processing includes sanding, polishing, and resin reflow to ensure clarity and remove support residue.
+</p>
+
+<h2>7. Extended Experiment: Capturing 4D Splat Volumes</h2>
+<p>
+  We prototype a novel extension: <em>long-exposure splats</em> that encode motion over time. Using a 9-camera linear array, we captured 30-second exposures of a moving subject under dynamic lighting. Photogrammetric reconstruction produced spatially extended splats resembling volumetric motion trails. While noisy due to limited angles, the results hint at potential for temporally layered splatcubes—physicalizations of time.
+</p>
+<p>
+    <img src="images/jujurhino.png" style="width: 80%";>
+</p>
+
+<h2>8. Results</h2>
+<p>
+  We demonstrate splatcube outputs across various scenes: still lifes, portraits, and long-exposure motion traces. Artifacts show spatial coherence and printable fidelity. The low-poly proxy approach preserves splat characteristics while enabling fabrication.
+</p>
+
+<h2>9. Limitations and Future Work</h2>
+<p>
+  Our system currently assumes static scenes and monochrome printing. Future work includes: color encoding using multi-resin or voxel printing, improved filtering via confidence scores, higher-fidelity temporal splats from video, and real-time acceleration.
+</p>
+
+<h2>10. Conclusion</h2>
+<p>
+  We present a complete workflow for physicalizing 3D Gaussian splats as tangible artifacts. Bridging the gap between volumetric rendering and fabrication, this method invites new ways of capturing, preserving, and interacting with space-time events. As an artistic and technical medium, splatcubes represent an emerging form of volumetric photography—one that is not merely seen, but held.
+</p>
+
+
+
+
+<p>
+    <h2>Results</h2>
+</p>
+<p>
+    Of fifteen 10cm³ test cubes, all succeeded at replicating splats in a single color with sub‑millimeter fidelity. This demonstration of tangible Gaussian‑splat prints yields free‑standing analogue objects that can be held and rotated naturally. Applications include art installations, scientific visualization, and design prototyping. Future work will explore full‑color splatcubes, automated post‑processing, and 4D “time‑encoded” prints via long‑exposure gaussian splat captures.
+</p>
+<p>
+    <img src="images/splatcube.JPG" style="width: 80%";>
+</p>
+
+<p>
+    <a href="images/splatcubes.zip" download>
+        <button>Download Splatcubes Grasshopper tool + ASCII Converter</button>
+    </a>
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+Javascript:
+- Used to create an entire web app that works as a Virtual Typewriter!
+
+Bootstrap:
+- Used for navbar and formatting of text areas
+
+HTML Tags used:
+1	p
+2	br
+3	a
+4	div
+5	h1
+6	em
+7	link
+8	script
+9	meta
+10	footer
+
+CSS Properties:
+1   body
+2   #typingarea
+3   typedpage
+4   h1
+5   .strong
+6   header a
+7   #navbar
+

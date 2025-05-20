@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyatt's Projects</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+
+    <h1>
+        Project 2: All RGB
+    </h1>
+    <p>
+        The images below were generated procedurally with code. The only difference between them is which order the red, green, and blue values are added to each other.
+    </p>
+    <p>
+        Right-click to download them full resolution. Code at the bottom. 
+    </p>
+    <p>
+         <img src="images/bgr.png" alt="BGR"  style="width: 60%;">
+         
+    </p>
+    <p>
+        <em>B-G-R</em>
+        <br/><br/><br/><br/>
+    </p>
+    <p>
+        <img src="images/brg.png" alt="BRG" style="width: 60%;">
+        
+   </p>
+   <p>
+       <em>B-R-G</em>
+       <br/><br/><br/><br/>
+   </p>
+   <p>
+    <img src="images/rgb.png" alt="RGB" style="width: 60%;">
+    
+</p>
+<p>
+   <em>R-G-B</em>
+   <br/><br/><br/><br/>
+</p>
+<p>
+    <img src="images/rbg.png" alt="RBG" style="width: 60%;">
+    
+</p>
+<p>
+   <em>R-B-G</em>
+   <br/><br/><br/><br/>
+</p>
+
+<p>
+    <img src="images/grb.png" alt="GRB" style="width: 60%;">
+    
+</p>
+<p>
+   <em>G-R-B</em>
+   <br/><br/><br/><br/>
+</p>
+<p>
+    <img src="images/gbr.png" alt="GBR" style="width: 60%;">
+    
+</p>
+<p>
+   <em>G-B-R</em>
+   <br/><br/><br/><br/>
+</p>
+
+<p>
+    <h4>Code</h4>
+    <pre>
+        <code>
+            let pixX;
+            let pixY;
+            let r = 0;
+            let g = 0;
+            let b = 0;
+            let debugR = 0;
+            let debugG = 0;
+            let debugB = 0;
+
+            function setup() {
+                createCanvas(4096, 4096);
+                pixelDensity(1);
+                pixX = width / 2 - 1;
+                pixY = height / 2 - 1;
+                noLoop();
+            }
+
+            function pingPong(i, maxValue) {
+                return maxValue - Math.abs((i % (2 * maxValue)) - maxValue);
+            }
+
+            function draw() {
+                background(0);
+                loadPixels();
+
+                let x = pixX;
+                let y = pixY;
+                let length = 1;
+                let count = 0;
+                let direction = 0;
+
+                let numberOfColors = 256;
+
+                for (let i = 0; i < width * height; i++) {
+                    // Calculate the index for the current pixel
+                    let index = (y * width + x) * 4;
+
+                    r = i % numberOfColors;
+                    b = floor(i / numberOfColors) % numberOfColors;
+                    g = floor(i / (numberOfColors * numberOfColors)) % numberOfColors;
+                    
+                    // Try to pingpong the colors; but yields multiple pixels of same color
+                    // b = pingPong(i, numberOfColors - 1);
+                    // g = pingPong(Math.floor(i / numberOfColors), numberOfColors - 1);
+                    // r = pingPong(Math.floor(i / (numberOfColors * numberOfColors)), numberOfColors - 1);
+
+                    // Set the pixel color
+                    pixels[index + 0] = r; // Red
+                    pixels[index + 1] = g;   // Green
+                    pixels[index + 2] = b;   // Blue
+                    pixels[index + 3] = 255; // Alpha
+
+                    // Move to the next position in the spiral
+                    switch (direction) {
+                    case 0: x++; break; // Right
+                    case 1: y++; break; // Down
+                    case 2: x--; break; // Left
+                    case 3: y--; break; // Up
+                    }
+
+                    count++;
+                    if (count >= length) {
+                        count = 0;
+                        direction = (direction + 1) % 4;
+                        if (direction % 2 === 0) {
+                            length++;
+                        }
+                    }
+
+                    // Stop if we go out of bounds
+                    if (x < 0 || x >= width || y < 0 || y >= height) {
+                    break;
+                    }
+                }
+
+                updatePixels();
+
+                // Debugging to find duplicate pixels
+                for (let j = 0; j < width * height; j++){
+                    let index = j * 4;
+                    
+                    if (pixels[index + 0] == debugR && pixels[index + 1] == debugG && pixels[index + 2] == debugB){
+                    console.log("The x y coordinates of j are: " + j % width + " " + floor(j / width));
+                    // ellipse(j % width, floor(j / width), 100, 100);
+                    }
+                }
+            }
+        </code>
+    </pre>
+</p>
+<p>
+    This image below is being generated dynamically at full-size with javascript code.
+
+</p>
+
+    <div id="canvas-container" style="width: 80%;"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script type="text/javascript" src="js/sketch.js"></script>
+
+</body>
+</html>
